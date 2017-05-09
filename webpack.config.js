@@ -20,10 +20,21 @@ const plugins = PRODUCTION ? [] : [new webpack.HotModuleReplacementPlugin()];
 // Default sintax for CommonJS module exports which can be understand by webpack? what about ES6?
 // See: https://webpack.js.org/configuration/
 const config = {
+  devtool: 'source-map',
   entry,  // string | object | array
   // Here the application starts executing and webpack starts bundling
 
   plugins,
+
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loaders: ['babel-loader'],
+        exclude: '/node_modules/',
+      },
+    ]
+  },
 
   output: {
 
