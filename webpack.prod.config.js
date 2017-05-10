@@ -4,6 +4,7 @@
 // this section for more info on POSIX vs. Windows paths.
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 const DEVELOPMENT = process.env.NODE_ENV === 'development';
@@ -11,12 +12,8 @@ const DEVELOPMENT = process.env.NODE_ENV === 'development';
 // Default sintax for CommonJS module exports which can be understand by webpack? what about ES6?
 // See: https://webpack.js.org/configuration/
 const config = {
-  devtool: 'source-map',
-  entry: [
-    './src/index.js',
-    'webpack/hot/dev-server',
-    'webpack-dev-server/client?http://localhost:8080',
-  ],  // string | object | array
+  devtool: false,
+  entry: './src/index.js',  // string | object | array
   // Here the application starts executing and webpack starts bundling
 
   plugins: [
@@ -24,7 +21,8 @@ const config = {
       DEVELOPMENT: JSON.stringify(DEVELOPMENT),
       PRODUCTION: JSON.stringify(PRODUCTION),
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    new ExtractTextPlugin('styles.css'),
+    new webpack.optimize.UglifyJsPlugin(),
   ],
 
   module: {
@@ -41,7 +39,10 @@ const config = {
       },
       {
         test: /\.css$/,
-        loaders: ['style-loader', 'css-loader?localIdentName=[path][name]--[local]'],
+        use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: 'css-loader?localIdentName=[hash:base64:10]'
+          }),
         exclude: '/node_modules/',
       },
     ]
