@@ -9,13 +9,28 @@ const PRODUCTION = process.env.NODE_ENV === 'production';
 const DEVELOPMENT = process.env.NODE_ENV === 'development';
 
 const entry = PRODUCTION
-              ? ['./src/index.js']
-              : [
-                  './src/index.js',
-                  'webpack/hot/dev-server',
-                  'webpack-dev-server/client?http://localhost:8080',
-                ];
-const plugins = PRODUCTION ? [] : [new webpack.HotModuleReplacementPlugin()];
+  ? ['./src/index.js']
+  : [
+      './src/index.js',
+      'webpack/hot/dev-server',
+      'webpack-dev-server/client?http://localhost:8080',
+    ];
+
+const plugins = PRODUCTION
+  ? [
+      new webpack.optimize.UglifyJsPlugin(),
+    ]
+  : [
+      new webpack.HotModuleReplacementPlugin(),
+    ];
+
+// Pushing vars to global scope
+plugins.push(
+  new webpack.DefinePlugin({
+    DEVELOPMENT: JSON.stringify(DEVELOPMENT),
+    PRODUCTION: JSON.stringify(PRODUCTION),
+  })
+)
 
 // Default sintax for CommonJS module exports which can be understand by webpack? what about ES6?
 // See: https://webpack.js.org/configuration/
@@ -29,8 +44,18 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         loaders: ['babel-loader'],
+        exclude: '/node_modules/',
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        loaders: ['url-loader?limit=10000&name=images/[hash:12].[ext]'],
+        exclude: '/node_modules/',
+      },
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader?localIdentName=[path][name]--[local]'],
         exclude: '/node_modules/',
       },
     ]

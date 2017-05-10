@@ -1,6 +1,10 @@
-import _ from 'lodash';
+const style = require('./styles/body.css');
+// import _ from 'lodash';
 import Button from './button.js';
-var messages = require('./messages.js');
+import Image from './image.js';
+import Image2 from './image2.js';
+import { mult } from './math.js';
+const messages = require('./messages.js');
 
 /* function component () {
   var element = document.createElement('div');
@@ -15,9 +19,19 @@ document.body.appendChild(component()); */
 element.innerHTML = `<p>${messages.hi} ${messages.name}</p>`; */
 // document.body.appendChild(element);
 
-var element = document.getElementById('root');
+/* var element = document.getElementById('root');
 element.innerHTML = Button.button;
-Button.attachEvent();
+Button.attachEvent(); */
+
+console.log('is DEV', DEVELOPMENT.toString());
+console.log('is PROD', PRODUCTION.toString());
+
+var element = document.getElementById('root');
+element.innerHTML = `<div class=${style.box}>
+${Image}
+${Image2}
+${mult(5,4)}
+</div>`;
 
 if (module.hot) {
   module.hot.accept();
