@@ -5,6 +5,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 const DEVELOPMENT = process.env.NODE_ENV === 'development';
@@ -21,8 +22,11 @@ const config = {
       DEVELOPMENT: JSON.stringify(DEVELOPMENT),
       PRODUCTION: JSON.stringify(PRODUCTION),
     }),
-    new ExtractTextPlugin('styles.css'),
+    new ExtractTextPlugin('styles-[contenthash:10].css'),
     new webpack.optimize.UglifyJsPlugin(),
+    new HtmlWebpackPlugin({
+      template: 'index-template.html',
+    }),
   ],
 
   module: {
@@ -54,8 +58,8 @@ const config = {
     // the target directory for all output files must be an absolute path
     // (use the Node.js path module)
 
-    publicPath: '/dist/', // public url of the output file when referenced in a browser
-    filename: 'bundle.js',
+    publicPath: '/', // public url of the output file when referenced in a browser
+    filename: 'bundle.[hash:12].min.js',
   },
 };
 

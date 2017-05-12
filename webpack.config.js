@@ -4,6 +4,7 @@
 // this section for more info on POSIX vs. Windows paths.
 const path = require('path');
 const webpack = require('webpack');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 const DEVELOPMENT = process.env.NODE_ENV === 'development';
@@ -25,6 +26,7 @@ const config = {
       PRODUCTION: JSON.stringify(PRODUCTION),
     }),
     new webpack.HotModuleReplacementPlugin(),
+    // new ExtractTextPlugin('styles.css'),
   ],
 
   module: {
